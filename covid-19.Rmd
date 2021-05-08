@@ -1,0 +1,41 @@
+---
+title: "covid-19"
+author: "Yirui Li"
+date: "2021/5/8"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data <- read.csv("national-history.csv")
+data_completed <- na.omit(data)
+correlation <- function(x,y){
+  cov = mean((x-mean(x))*(y-mean(y)))
+  cor = cov/(sd(x)*sd(y))
+  return(cor)
+}
+```
+
+```{r}
+# correlation between new cases and commutative cases 
+cor_newcumu <- correlation(data_completed$deathIncrease,data_completed$inIcuCumulative)
+cor_newcumu
+# correlation between new cases and deaths
+cor_newde <- correlation(data_completed$deathIncrease,data_completed$death)
+cor_newde
+# correlation between deaths and commutative cases 
+cor_coomude <- correlation(data_completed$inIcuCumulative,data_completed$death)
+cor_coomude
+```
+
+# plot
+```{r}
+plot(cor_newcumu)
+
+plot(cor_newde)
+
+plot(cor_coomude)
+```
