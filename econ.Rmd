@@ -1,0 +1,44 @@
+---
+title: "R"
+author: ""
+date: "2021/5/15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+covid <- read.csv("national-history.csv")
+covid <- na.omit(covid)
+covid <- covid[205:297,]
+new_death <- covid$deathIncrease
+new_confirmed <- covid$positiveIncrease
+BTC <- read.csv("BTC.csv")
+BTC <- BTC[1:93,]$Close
+library(ggplot2)
+data <- data.frame(as.numeric(new_confirmed),as.numeric(new_death),as.numeric(BTC))
+ggplot(data, aes(x=as.numeric(new_confirmed), y=as.numeric(new_death), fill=BTC)) +
+    geom_tile() +
+    scale_fill_gradient(low="lightgreen", high="darkgreen")
+```
+
+```{r}
+heatmap.plot <- ggplot(data = data, aes(x = new_confirmed, y = new_death)) +
+  geom_tile(aes(fill = BTC)) +
+  scale_fill_gradient2() +
+  theme(axis.text.y = element_text(size = 6))
+
+# Preview the heatmap
+print(heatmap.plot)
+```
+
+```{r}
+ggplot(data = data, aes(x = new_confirmed, y = BTC)) +
+  geom_point(color = "red")
+
+ggplot(data = data, aes(x = new_death, y = BTC)) +
+  geom_point(color = "red")
+install.packages(complexheatmap)
+```
